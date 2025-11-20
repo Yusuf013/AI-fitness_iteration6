@@ -1,0 +1,5 @@
+epoch,step,test_accuracy_class_0,test_accuracy_class_1,test_accuracy_class_2,test_accuracy_class_3,test_accuracy_class_4,test_accuracy_class_5,test_precision_class_0,test_precision_class_1,test_precision_class_2,test_precision_class_3,test_precision_class_4,test_precision_class_5,test_recall_class_0,test_recall_class_1,test_recall_class_2,test_recall_class_3,test_recall_class_4,test_recall_class_5,val_loss
+0,1,,,,,,,,,,,,,,,,,,,2.3256638050079346
+1,3,,,,,,,,,,,,,,,,,,,2.3143863677978516
+2,5,,,,,,,,,,,,,,,,,,,2.1607375144958496
+3,6,0.0,0.0,0.3333333432674408,0.0,0.0,0.0,0.0,0.0,0.3333333432674408,0.0,0.0,0.0,0.0,0.0,0.3333333432674408,0.0,0.0,0.0,
