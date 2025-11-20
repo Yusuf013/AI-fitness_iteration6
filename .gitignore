@@ -211,6 +211,7 @@ dataset/inference/
 dataset/**/*.jpg
 dataset/**/*.jpeg
 dataset/**/*.png
+data2
 
 # ignore model outputs
 *.pt
