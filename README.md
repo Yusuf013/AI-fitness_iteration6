@@ -1,100 +1,48 @@
 # AI Fitness Exercise Recognition (PyTorch → ONNX → Flutter)
 
 Dit project bevat een AI-model dat fitnessoefeningen herkent op basis van één afbeelding.  
-Het model is getraind met PyTorch (ResNet-18) en geëxporteerd naar het ONNX-formaat voor gebruik in een Flutter mobiele applicatie.
+Het model is getraind met PyTorch (ResNet-18) en geëxporteerd naar ONNX voor gebruik in een Flutter mobiele app.
 
-De mobiele app kan hiermee volledig **on-device** (zonder internet) voorspellingen doen, wat goed is voor privacy en prestaties.
+De app voert herkenning volledig **on-device** uit (zonder internet).
 
 ---
 
-## Functionaliteit
+## Herkende oefeningen
 
-Het model herkent de volgende oefeningen:
-
-- cable_flyes
-- incline_benchpress
-- machine_pulldown
-- pullup
-- romanian_deadlift
-- squats
-
-Op basis van een foto geeft de app:
-
-- de naam van de oefening
-- (optioneel) aanvullende informatie zoals spiergroepen en uitvoeringstips
+- cable_flyes  
+- incline_benchpress  
+- machine_pulldown  
+- pullup  
+- romanian_deadlift  
+- squats  
 
 ---
 
 ## Model
 
 - Architectuur: ResNet-18 (pretrained)
-- Framework: PyTorch + PyTorch Lightning
-- Input: RGB afbeelding 224×224
-- Output: klasse-index (0–5)
-
----
-
-## Projectstructuur (globaal)
-
-/dataset
-/data
-/inference
-
-/notebooks
-training_notebook.ipynb
-export_to_onnx.ipynb
-
-/model.pth
-/fitness_resnet18.onnx
-
-/flutter_app
-
-yaml
-Code kopiëren
+- Input: 224×224 RGB afbeelding
+- Output: oefeningsklasse (0–5)
 
 ---
 
 ## Python omgevingen
 
-Dit project gebruikt **twee aparte Python-omgevingen**. Dit is bewust gedaan om stabiliteit en reproduceerbaarheid te garanderen.
+Dit project gebruikt twee Python-versies:
 
-### 1. Training environment
+### Training
+- Python 3.14  
+- Voor model training en evaluatie
 
-Gebruikt voor:
+### Export naar ONNX
+- Python 3.10  
+- Nodig vanwege ONNX Runtime compatibiliteit
 
-- dataset laden
-- model trainen
-- evaluatie
-- opslaan van `model.pth`
+---
 
-**Python versie:** 3.14
+## Dependencies
 
-#### Setup
-
-```bash
-python -m venv train-env
-train-env\Scripts\activate
-pip install -r requirements-training.txt
-2. Export environment (ONNX)
-Gebruikt voor:
-
-laden van model.pth
-
-exporteren naar fitness_resnet18.onnx
-
-Python versie: 3.10
-(ONNX Runtime ondersteunt Python 3.14 momenteel niet op Windows)
-
-Setup
-bash
-Code kopiëren
-py -3.10 -m venv onnx-env
-onnx-env\Scripts\activate
-pip install -r requirements-export.txt
-Dependencies
-requirements-training.txt
-txt
-Code kopiëren
+### Training
 torch
 torchvision
 pytorch-lightning
@@ -102,85 +50,41 @@ torchmetrics
 matplotlib
 pandas
 numpy
-requirements-export.txt
-txt
+
+shell
 Code kopiëren
+
+### Export
 torch
 torchvision
 onnx
 onnxruntime
 onnxscript
 numpy
-ONNX export proces
-Laad het PyTorch model (model.pth)
 
-Strip Lightning prefix (model.)
-
-Bouw ResNet-18 opnieuw
-
-Exporteer naar ONNX:
-
-Output:
-
+yaml
 Code kopiëren
-fitness_resnet18.onnx
-Deze file wordt gebruikt in de Flutter app.
 
-Flutter integratie (samenvatting)
-Plaats het model in:
+---
 
-bash
+## Export pipeline
+
+PyTorch (.pth) → ONNX (.onnx) → Flutter app
+
+yaml
 Code kopiëren
-assets/models/fitness_resnet18.onnx
-Voeg toe aan pubspec.yaml
 
-Installeer dependency:
+Het ONNX-bestand `fitness_resnet18.onnx` wordt direct in de app geladen.
 
-bash
-Code kopiëren
-flutter pub add onnxruntime
-Preprocessing in de app:
+---
 
-resize → 224×224
+## Flutter integratie (kort)
 
-RGB → float (0–1)
+- Model in `assets/models/fitness_resnet18.onnx`
+- Dependency: `onnxruntime`
+- Preprocessing:
+  - resize → 224×224
+  - pixelwaarden → 0–1 floats
+  - tensor shape → [1, 3, 224, 224]
 
-tensor shape → [1, 3, 224, 224] (CHW)
-
-Output index → map naar class name:
-
-dart
-Code kopiëren
-const classes = [
-  'cable_flyes',
-  'incline_benchpress',
-  'machine_pulldown',
-  'pullup',
-  'romanian_deadlift',
-  'squats',
-];
-Belangrijk
-De preprocessing in Flutter moet exact gelijk zijn aan de preprocessing tijdens training.
-
-De ONNX export moet worden uitgevoerd met Python 3.10.
-
-Training notebooks mogen Python 3.14 blijven gebruiken.
-
-Bekende beperkingen
-Model herkent slechts 6 oefeningen
-
-Werkt op basis van één frame (geen video)
-
-Geen pose-validatie (alleen classificatie)
-
-Toekomstige verbeteringen
-Meer oefeningen toevoegen
-
-Pose estimation integreren
-
-Confidence thresholding
-
-Model quantization voor kleinere bestanden
-
-Real-time video ondersteuning
-```
+---
